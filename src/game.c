@@ -1,4 +1,5 @@
 #include "game.h"
+#include "level.h"
 #include "log.h"
 
 #include <stdbool.h>
@@ -12,6 +13,8 @@ struct Game {
     SDL_Renderer *renderer;
 
     bool should_quit;
+
+    Level *level;
 };
 
 
@@ -36,8 +39,6 @@ Game *game_create(void) {
         return NULL;
     }
 
-    LOG_DEBUG("initialized SDL");
-
 
     LOG_DEBUG("initializing SDL objects");
 
@@ -60,8 +61,6 @@ Game *game_create(void) {
         return NULL;
     }
 
-    LOG_DEBUG("initialized SDL objects");
-
 
     Game *self = calloc(1, sizeof(Game));
 
@@ -79,11 +78,20 @@ Game *game_create(void) {
     self->window = window;
     self->renderer = renderer;
 
+
+    LOG_DEBUG("initializing game objects");
+
+    self->level = level_create();
+
+
     return self;
 }
 
 
 void game_destroy(Game *game) {
+    LOG_DEBUG("deinitializing game objects");
+    level_destroy(game->level);
+
     LOG_DEBUG("deinitializing SDL objects");
     SDL_DestroyRenderer(game->renderer);
     SDL_DestroyWindow(game->window);
