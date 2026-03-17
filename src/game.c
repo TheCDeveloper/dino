@@ -64,6 +64,16 @@ Game *game_create(void) {
 
 
     Game *self = calloc(1, sizeof(Game));
+
+    if (!self) {
+        LOG_ERROR("failed to allocate Game *!");
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+
+        return NULL;
+    }
+
     LOG_DEBUG("allocated Game * %p", self);
 
     self->window = window;
